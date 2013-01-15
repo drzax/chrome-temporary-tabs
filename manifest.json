@@ -1,11 +1,10 @@
 {
 	"name": "Temporary Tab",
-	"version": "0.1",
+	"version": "0.2",
 	"permissions": [
 		"tabs",
 		"storage",
-		"unlimitedStorage",
-		"idle"
+		"unlimitedStorage"
 	],
 	"background": {
 		"scripts": [
@@ -13,6 +12,22 @@
 		],
 		"persistent": false
 	},
-	"page_action": {},
+	"options_page": "options.html",
+	"content_scripts": [
+		{
+			"matches": ["*://*/*"],
+			"js": ["destruct.js"]
+		}
+	],
+	"page_action": {
+		"default_icon": {
+			"19": "images/bomb_19.png",
+			"38": "images/bomb.png"
+		},
+		"default_title": "Defuse self destruct"
+	},
+	"chrome_url_overrides" : {
+		"newtab": "blank.html"
+	},
 	"manifest_version": 2
 }
