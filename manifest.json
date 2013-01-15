@@ -4,13 +4,15 @@
 	"permissions": [
 		"tabs",
 		"storage",
-		"unlimitedStorage"
+		"unlimitedStorage",
+		"webNavigation",
+		"history"
 	],
 	"background": {
 		"scripts": [
 			"background.js"
 		],
-		"persistent": false
+		"persistent": true
 	},
 	"options_page": "options.html",
 	"content_scripts": [

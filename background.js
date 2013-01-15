@@ -10,25 +10,26 @@
 		// Never arm a defused tab
 		if (fn.isDefused(tabId)) return;
 		
-		console.log('armed', tabId);
+//		console.log('armed', tabId);
 		
 		chrome.storage.local.get('options', function(data){
-			chrome.tabs.sendMessage(tabId, {command: 'arm', params: {fuseLength: data.options.timeout*1000}});
+//			chrome.tabs.sendMessage(tabId, {command: 'arm', params: {fuseLength: data.options.timeout*1000}});
 		});
 	};
 	
 	// Disarm a tab
 	fn.disarm = function(tabId) {
-		console.log('disarmed', tabId);
+//		console.log('disarmed', tabId);
 		chrome.tabs.sendMessage(tabId, {command: 'disarm', params: {}});
 	};
 	
 	// Defuse a tab
-	fn.defuse = function(tabId) {
-		console.log('defused', tabId);
-		if (!fn.isDefused(tabId)) {
-			defusedTabs.push(tabId);
-			fn.setDefusedIcon(tabId);
+	fn.defuse = function(tab) {
+		if (!fn.isDefused(tab.id)) {
+//			console.log('defused', tab.title);
+			defusedTabs.push(tab.id);
+			fn.setDefusedIcon(tab.id);
+//			chrome.storage.local.set({defused:})
 		}
 	};
 	
@@ -53,8 +54,8 @@
 		
 		// Don't remove tabs which are pinned or currently focused
 		if ( !data.tab.pinned && !fn.isDefused(data.tab.id) ) {
-			console.log('log',data.tab);
-			chrome.tabs.remove(data.tab.id);
+//			console.log('log',data.tab);
+//			chrome.tabs.remove(data.tab.id);
 		}
 	};
 	
@@ -83,7 +84,7 @@
 	});
 
 	chrome.tabs.onCreated.addListener(function(tab){
-//		console.log(tab);
+		console.log(tab.url);
 	});
 	
 	chrome.tabs.onRemoved.addListener(function(tabId, info){
@@ -93,7 +94,22 @@
 	});
 
 	chrome.pageAction.onClicked.addListener(function(tab){
-		fn.defuse(tab.id);
+		fn.defuse(tab);
+	});
+	
+	chrome.runtime.onStartup.addListener(function(){
+		chrome.storage.local.get({defused:[]}, function(data){
+//			console.log('startup', data);
+		});
+	});
+	
+	chrome.tabs.onUpdated.addListener(function(tabId, info, tab){
+		if (fn.isDefused(tabId)) {
+			chrome.storage.local.get({defused:[]}, function(data){
+				data.defused[tabId] = tab.url;
+				chrome.storage.local.set(data);
+			});
+		}
 	});
 	
 })();

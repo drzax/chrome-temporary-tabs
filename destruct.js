@@ -39,4 +39,6 @@
 	// Let mission control know that everything is in place.
 	chrome.extension.sendMessage('activated');
 	
+	console.log(location.href,document.referrer,history.length);
+	
 })();
