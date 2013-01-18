@@ -1,0 +1,44 @@
+body {
+	padding: 10px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	color: #333;
+}
+
+hr {
+	margin: 8px 0;
+	border: 0;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #fff;	
+}
+
+.container {
+	width: 500px;
+}
+
+#defuse {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+ol.history {
+	margin: 0;
+	padding: 0;
+}
+
+ol.history li {
+	list-style: none;
+}
+
+ol.history li span.time {
+	color: #ccc;
+	width: 80px;
+	dispaly: inline-block;
+	text-align: center;
+}
+
+ol.history li img {
+	margin: 0 5px; 
+}

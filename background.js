@@ -1,116 +1,71 @@
+
 (function(undefined){
-	// Closure variables
-	var defusedTabs = [],			// Keep track of defused tabs
-		lastActiveTab = false,		// Keep track of last active tab
-		fn = {};					// Private functions
 	
-	// Arm a tab
-	fn.arm = function(tabId) {
+	var active = false,
+		removed = [];
 		
-		// Never arm a defused tab
-		if (fn.isDefused(tabId)) return;
+	chrome.storage.local.get({removed: []}, function(data){
+		removed = data.removed;
+		console.log(removed);
+	});
+	
+	chrome.extension.onMessage.addListener(function(message, sender) {
+		if (sender.tab.active) {
+			active = TabRegistry.guid(sender.tab.id);
+		} else {
+			arm(TabRegistry.guid(sender.tab.id));
+		}
+	});
+	
+	function arm(guid) {
 		
-//		console.log('armed', tabId);
+		// If guid is null we can't arm anything
+		if (guid == null) return;
+		
+		console.log('arming', guid);
+		
+		// Always disarm before arming to avoid double arming
+		disarm(guid);
 		
 		chrome.storage.local.get('options', function(data){
-//			chrome.tabs.sendMessage(tabId, {command: 'arm', params: {fuseLength: data.options.timeout*1000}});
+			TabRegistry.set(guid, 'timeout', setTimeout(function(){
+				chrome.tabs.get(TabRegistry.id(guid), function(tab){
+					if (tab.active || tab.pinned || TabRegistry.get(guid, 'defused')) return;
+					tab.removed = Date();
+					tab.guid = guid;
+					removed.unshift(tab);
+					while (removed.length > 30) removed.pop();
+					chrome.storage.local.set({removed: removed});
+					chrome.tabs.remove(tab.id);
+				});
+			}, data.options.timeout*1000));
 		});
-	};
+	}
 	
-	// Disarm a tab
-	fn.disarm = function(tabId) {
-//		console.log('disarmed', tabId);
-		chrome.tabs.sendMessage(tabId, {command: 'disarm', params: {}});
-	};
-	
-	// Defuse a tab
-	fn.defuse = function(tab) {
-		if (!fn.isDefused(tab.id)) {
-//			console.log('defused', tab.title);
-			defusedTabs.push(tab.id);
-			fn.setDefusedIcon(tab.id);
-//			chrome.storage.local.set({defused:})
+	function disarm(guid) {
+		if (guid !== null) {
+			console.log('disarming', guid);
+			clearTimeout(TabRegistry.get(guid, 'timeout'));
 		}
-	};
+	}
 	
-	// Set the defused icon
-	fn.setDefusedIcon = function(tabId){
-		chrome.pageAction.setIcon({
-			tabId: tabId,
-			path: {
-				"38": "images/infinity.png",
-				"19": "images/infinity_19.png"
-			}
-		});
+	chrome.tabs.onActivated.addListener(function(info) {
 		
-		chrome.pageAction.setTitle({
-			tabId: tabId,
-			title: "Self destruct successfully defused"
-		})
-	}
-	
-	// Destroy a tab
-	fn.boom = function(data) {
+		var guid = TabRegistry.guid(info.tabId);
 		
-		// Don't remove tabs which are pinned or currently focused
-		if ( !data.tab.pinned && !fn.isDefused(data.tab.id) ) {
-//			console.log('log',data.tab);
-//			chrome.tabs.remove(data.tab.id);
+		console.info('Tab activated.', info, guid, active);
+		
+		// Arm the tab we just switched away from.
+		if (active) {
+			
+			arm(active);
 		}
-	};
-	
-	// Is this tab defused?
-	fn.isDefused = function(tabId) {
-		return (defusedTabs.indexOf(tabId) >= 0);
-	}
-	
-	// Tab registers as activated.
-	fn.activated = function(data) {
-		if (fn.isDefused(data.tab.id)) {
-			fn.setDefusedIcon(data.tab.id);
-		}
-		chrome.pageAction.show(data.tab.id);
-	}
-	
-	// Receive messages from field agents.
-	chrome.extension.onMessage.addListener(function(request, sender, response){
-		fn[request](sender);
+		
+		disarm(guid);
+		
+		active = guid || false;
+		
 	});
 	
-	chrome.tabs.onActivated.addListener(function(info){
-		if (lastActiveTab) fn.arm(lastActiveTab);
-		lastActiveTab = info.tabId;
-		fn.disarm(info.tabId);
-	});
-
-	chrome.tabs.onCreated.addListener(function(tab){
-		console.log(tab.url);
-	});
-	
-	chrome.tabs.onRemoved.addListener(function(tabId, info){
-		var idx = defusedTabs.indexOf(tabId);
-		if (idx >= 0) defusedTabs.splice(idx,1);
-		if (lastActiveTab == tabId) lastActiveTab = false;
-	});
-
-	chrome.pageAction.onClicked.addListener(function(tab){
-		fn.defuse(tab);
-	});
-	
-	chrome.runtime.onStartup.addListener(function(){
-		chrome.storage.local.get({defused:[]}, function(data){
-//			console.log('startup', data);
-		});
-	});
-	
-	chrome.tabs.onUpdated.addListener(function(tabId, info, tab){
-		if (fn.isDefused(tabId)) {
-			chrome.storage.local.get({defused:[]}, function(data){
-				data.defused[tabId] = tab.url;
-				chrome.storage.local.set(data);
-			});
-		}
-	});
 	
 })();
-

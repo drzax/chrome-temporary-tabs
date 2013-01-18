@@ -1,0 +1,3 @@
+[submodule "lib/tab-registry"]
+	path = lib/tab-registry
+	url = git@github.com:drzax/chrome-tab-registry.git
