@@ -1,12 +1,16 @@
-Temporary Tab
-=============
+This Tab Will Self Destruct™
+============================
 
-An extension for Chrome that automatically cleans up temporary tabs to keep your 
+An extension for Chrome that automatically cleans up unused tabs to keep your 
 browser snappy.
+	
+Credits
+-------
+Icons from the [Noun Project](http://thenounproject.com/): 
+- [Infinity](http://thenounproject.com/noun/infinity/#icon-No9992) designed by [Cengiz SARI](http://thenounproject.com/cengizsari) from The Noun Project
+- [Apocalypse](http://thenounproject.com/noun/apocalypse/#icon-No9383) designed by [Mark Szulyovszky](http://thenounproject.com/markszulyovszky) from The Noun Project
 
-This is super alpha and will be changing drastically quite soon.
-
-For now, it allows you to open a new tab (Alt+Shift+Y) which will automatically 
-self destruct after being idle for 60 seconds. This behaviour will probably 
-change so tabs are self destructing by default, but can be 'saved' with a 
-simple key combination or UI click.
+License
+-------
+[The MIT License (MIT)](http://drzax.mit-license.org/)
+Copyright © 2013 [Simon Elvery](http://elvery.net) <simon@elvery.net>
