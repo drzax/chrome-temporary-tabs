@@ -1,4 +1,3 @@
-
 (function(undefined){
 	
 	var active = false,
@@ -6,7 +5,6 @@
 		
 	chrome.storage.local.get({removed: []}, function(data){
 		removed = data.removed;
-		console.log(removed);
 	});
 	
 	chrome.extension.onMessage.addListener(function(message, sender) {
@@ -21,8 +19,6 @@
 		
 		// If guid is null we can't arm anything
 		if (guid == null) return;
-		
-		console.log('arming', guid);
 		
 		// Always disarm before arming to avoid double arming
 		disarm(guid);
@@ -44,7 +40,6 @@
 	
 	function disarm(guid) {
 		if (guid !== null) {
-			console.log('disarming', guid);
 			clearTimeout(TabRegistry.get(guid, 'timeout'));
 		}
 	}

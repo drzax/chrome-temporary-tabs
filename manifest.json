@@ -2,9 +2,9 @@
 	"name": "This Tab Will Self Destruct™",
 	"description": "Automatically cleans up unused tabs to keep your browser snappy.",
 	"icons": { 
-		"16": "images/apocalypse16.png",
-		"48": "images/apocalypse48.png",
-		"128": "images/apocalypse128.png" 
+		"16": "images/apocalypse-16.png",
+		"48": "images/apocalypse-48.png",
+		"128": "images/apocalypse-128.png" 
 	},
 	"version": "0.2",
 	"permissions": [
@@ -27,8 +27,8 @@
 	],
 	"browser_action": {
 		"default_icon": {
-			"19": "images/apocalypse19.png",
-			"38": "images/apocalypse38.png"
+			"19": "images/disabled-19.png",
+			"38": "images/disabled-38.png"
 		},
 		"default_title": "This page will self destruct",
 		"default_popup": "popup.html"
