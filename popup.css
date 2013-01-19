@@ -30,13 +30,20 @@ ol.history {
 
 ol.history li {
 	list-style: none;
+	line-height: 20px;
+	vertical-align: middle;
 }
 
 ol.history li span.time {
 	color: #ccc;
 	width: 80px;
-	dispaly: inline-block;
+	display: inline-block;
 	text-align: center;
+}
+
+ol.history li.divider {
+	font-size: 10px;
+	line-height: 10px;
 }
 
 ol.history li img {

@@ -35,8 +35,8 @@
 				+ '</h6>';
 	}
 	
-	chrome.storage.local.get({removed: []}, function(data){
-		var i, date, currentDay, table;
+	chrome.storage.local.get({removed: []}, function(data) {
+		var i, date, lastDate, currentDay, table='';
 		
 		for (i in data.removed) {
 			
@@ -51,11 +51,37 @@
 				table += '<ol class="history">';
 				currentDay = date.toDateString();
 			}
+			if (lastDate && (lastDate-date)/1000/60 > 20) {
+				table += '<li class="divider"><span class="time">|</span></li>';
+			}
 			table += '<li><span class="time">' + date.get12HourTime() + '</span> ';
 			table += '<img width="16" height="16" src="' + data.removed[i].favIconUrl + '"/>';
 			table += '<a href="' + data.removed[i].url + '">' + ((data.removed[i].title.length > 50) ? data.removed[i].title.substr(0, 50) + '&hellip;' : data.removed[i].title) + '</a></li>';
+			lastDate = date;
 		}
 		table += '</ol>';
-		$('#defuse').after(table);
+		$('#list').html(table);
 	});
+	
+	$('#defuse').on('click', function(){
+		chrome.extension.getBackgroundPage().defuse();
+		$(this).attr('disabled','disabled').text('Defused');
+	});
+	
+	chrome.tabs.query({
+		active: true,
+		currentWindow: true
+	}, function(tabs){
+		var registry = chrome.extension.getBackgroundPage().TabRegistry,
+			guid = (tabs.length) ? registry.guid(tabs[0].id) : null;
+		if (registry.get(guid, 'defused')) $('#defuse').attr('disabled','disabled').text('Defused');
+	});
+	
+	$('#list').on('click', 'a', function(){
+		var $this = $(this),
+			href = $this.attr('href');
+		chrome.tabs.create({url:href});
+	});
+	
+	
 })(jQuery);
