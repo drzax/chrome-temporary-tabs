@@ -1,22 +1,60 @@
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Options</title>
+		<title>Options - This Tab Will Self Destruct™</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style>
+			body {padding: 30px 20px;}
+			#status {display: none; vertical-align: middle;}
+			fieldset span {height: 20px; padding: 4px 6px; display: inline-block; margin-bottom: 10px; vertical-align: middle;}
+		</style>
 	</head>
 	<body>
-		<h1>Options</h1>
-		<label for="timeout">Timeout </label>
-		<input type="text" name="timeout" id="timeout" />
-		<script src="options.js"></script>
-		<span id="status"></span>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<p class="lead">This Tab Will Self Destruct™</p>
+					<p>Tabs will close after <span class="timeout"></span> <span class="unit"></span> of inactivity.</p>
+					<p>Tabs won't self destruct if they're pinned or currently active.</p>
+					<p>Defuse a self destructing tab by clicking the <img src="images/apocalypse-16.png"/> icon on the toolbar and choosing <a class="btn btn-small">Defuse</a>.</p>
+					<div class="muted">
+						<p>This is an open source program. The source code is available on <a href="https://github.com/drzax/chrome-temporary-tabs">GitHub</a>. Please feel free to contribute or modify for your own purposes. If you have a bug report or, better yet, know how to fix one, that should be done at <a href="https://github.com/drzax/chrome-temporary-tabs/issues">GitHub</a> too.</p>
+					</div>
+					
+				</div>
+				<div class="span10">
+					<form class="inline-form">
+						<p class="lead">Options <span id="status" class="label label-success">Saved</span></p>
+						<fieldset>
+							<span>Close tabs after</span> <input type="text" size="3" name="timeout" class="input-mini" id="timeout" />
+							<select id="unit" name="unit" class="input-small">
+								<option value="minute">Minutes</option>
+								<option value="hour">Hours</option>
+								<option value="day">Days</option>
+							</select> <span>of inactivity.</span>
+							
+						</fieldset>
+					</form>
+					<hr>
+					<div class="muted">
+						<p><a href="http://drzax.mit-license.org/">The MIT License (MIT)</a><br>Copyright © 2013 <a href="http://elvery.net">Simon Elvery</a> &lt;<a href="mailto:simon@elvery.net">simon@elvery.net</a>&gt;</p>
+
+						<p>Icons thanks to <a href="">The Noun Project</a></p>
+						<ul>
+							<li><a href="http://thenounproject.com/noun/infinity/#icon-No9992">Infinity</a> designed by <a href="http://thenounproject.com/cengizsari">Cengiz SARI</a> from The Noun Project</li>
+							<li><a href="http://thenounproject.com/noun/apocalypse/#icon-No9383">Apocalypse</a> designed by <a href="http://thenounproject.com/markszulyovszky">Mark Szulyovszky</a> from The Noun Project</li>
+						</ul>
+					</div>
+					<hr>
+					<button class="btn btn-mini btn-warning" id="clear">Clear all extension data</button>
+				</div>
+			</div>
+		</div>
 		
-		<script src="http://code.jquery.com/jquery-latest.js"></script>
-		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+		
+		
+		<script src="lib/jquery/jquery-1.9.0.min.js"></script>
+		<script src="options.js"></script>
 	</body>
 </html>

@@ -1,39 +1,54 @@
-// Save this script as `options.js`
+;(function($, undefined){
+	function save(e) {
+		var input = e.target,
+			$status = $("#status");
 
-/**
- * Save options as they're edited.
- */
-function save(e) {
-	var input = e.target,
-		data = {options:{}},
-		status = document.getElementById("status");
+		chrome.storage.local.get(chrome.extension.getBackgroundPage().defaults, function(data){
+			data.options[input.name] = input.value;
+			chrome.storage.local.set(data);
+		});
+		
+
+		// Update status to let user know options were saved.
+		$status.show(function(){
+			$(this).fadeOut(1000);
+		});
+		
+		modifyInstructions();
+	}
 	
-	status.innerHTML = 'Saving...';
-	data.options[input.name] = input.value;
-	chrome.storage.local.set(data);
+	function modifyInstructions() {
+		$('span.timeout').text($('#timeout').val());
+		$('span.unit').text($('#unit').val() + (($('#timeout').val()>1)?'s':''));
+	}
 
-	// Update status to let user know options were saved.
-	status.innerHTML = 'Saved';
-	setTimeout(function() {
-		status.innerHTML = "";
-	}, 750);
-}
+	/**
+	 * Load options back into the form from storage.
+	 */
+	function load() {
+		chrome.storage.local.get(chrome.extension.getBackgroundPage().defaults, function(data){
+			var key;
+			for (key in data.options) {
+				document.getElementById(key).value = data.options[key];
+			}
+			modifyInstructions();
+		});
+	}
 
-/**
- * Load options back into the form from storage.
- */
-function load() {
-	var defaults = {
-		'options': {
-			'timeout': 60
-		}
-	};
-	chrome.storage.local.get(defaults, function(data){
-		var key;
-		for (key in data.options) {
-			document.getElementById(key).value = data.options[key];
-		}
+	function clear() {
+		chrome.extension.getBackgroundPage().TabRegistry.reset();
+		chrome.storage.local.clear();
+		load();
+	}
+	
+	$(function(){
+		load();
+
+		$(document).on('change', 'select', save);
+		$(document).on('keyup', 'input', save);
+
+		$('#clear').on('click', function(){
+			clear();
+		});
 	});
-}
-document.addEventListener('DOMContentLoaded', load);
-document.querySelector('input').addEventListener('change', save);
+})(jQuery)
