@@ -9,6 +9,8 @@ Installation
 Download the [temporary-tab.crx](https://github.com/drzax/chrome-temporary-tabs/blob/release/temporary-tab.crx?raw=true) file from the release 
 branch of this repository then install by dragging onto the [Chrome extensions window](http://support.google.com/chrome/bin/answer.py?hl=en&answer=187443).
 
+After installation you may need to restart Chrome.
+
 Usage
 -----
 Usage is documented in the extension's options screen.
