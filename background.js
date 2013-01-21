@@ -36,6 +36,8 @@
 		
 	});
 	
+	chrome.tabs.onUpdated.addListener(updateBrowserButton);
+	
 	function arm(guid) {
 		
 		// If guid is null we can't arm anything
