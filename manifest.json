@@ -6,10 +6,12 @@
 		"48": "images/apocalypse-48.png",
 		"128": "images/apocalypse-128.png" 
 	},
-	"version": "0.2",
+	"version": "0.3",
 	"permissions": [
 		"tabs",
-		"storage"
+		"storage",
+		"http://*/*",
+		"https://*/*"
 	],
 	"background": {
 		"scripts": [
@@ -19,12 +21,6 @@
 		"persistent": true
 	},
 	"options_page": "options.html",
-	"content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"js": ["lib/tab-registry/ContentScript.js"]
-		}
-	],
 	"browser_action": {
 		"default_icon": {
 			"19": "images/disabled-19.png",
