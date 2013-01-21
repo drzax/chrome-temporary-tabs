@@ -7,7 +7,7 @@ browser snappy.
 Installation
 ------------
 Download the [temporary-tab.crx](https://github.com/drzax/chrome-temporary-tabs/blob/release/temporary-tab.crx?raw=true) file from the release 
-branch of this repository then install by dragging onto the Chrome <a href="chrome://extensions">extensions window</a>.
+branch of this repository then install by dragging onto the [Chrome extensions window](http://support.google.com/chrome/bin/answer.py?hl=en&answer=187443).
 
 Usage
 -----
