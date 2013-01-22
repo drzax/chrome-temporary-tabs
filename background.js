@@ -46,7 +46,7 @@
 		// Always disarm before arming to avoid double arming
 		disarm(guid);
 		
-		chrome.storage.local.get(window.defaults, function(data){
+		chrome.storage.sync.get(window.defaults, function(data){
 			var multiplier = 1000;
 			if (data.options.unit === 'minute') multiplier *= 60;
 			if (data.options.unit === 'hour') multiplier *= 3600;

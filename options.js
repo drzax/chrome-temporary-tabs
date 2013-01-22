@@ -3,9 +3,9 @@
 		var input = e.target,
 			$status = $("#status");
 
-		chrome.storage.local.get(chrome.extension.getBackgroundPage().defaults, function(data){
+		chrome.storage.sync.get(chrome.extension.getBackgroundPage().defaults, function(data){
 			data.options[input.name] = input.value;
-			chrome.storage.local.set(data);
+			chrome.storage.sync.set(data);
 		});
 		
 
@@ -26,7 +26,7 @@
 	 * Load options back into the form from storage.
 	 */
 	function load() {
-		chrome.storage.local.get(chrome.extension.getBackgroundPage().defaults, function(data){
+		chrome.storage.sync.get(chrome.extension.getBackgroundPage().defaults, function(data){
 			var key;
 			for (key in data.options) {
 				document.getElementById(key).value = data.options[key];
@@ -37,6 +37,7 @@
 
 	function clear() {
 		chrome.extension.getBackgroundPage().TabRegistry.reset();
+		chrome.storage.sync.clear();
 		chrome.storage.local.clear();
 		load();
 	}
