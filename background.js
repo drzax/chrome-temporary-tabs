@@ -38,7 +38,9 @@
 		disarm(guid);
 		
 		chrome.storage.sync.get(window.defaults, function(data){
+			
 			var multiplier = 1000;
+			
 			if (data.options.unit === 'minute') multiplier *= 60;
 			if (data.options.unit === 'hour') multiplier *= 3600;
 			if (data.options.unit === 'day') multiplier *= 86400;
@@ -81,14 +83,14 @@
 			currentWindow: true
 		}, function(tabs){
 			
-			var tab, guid = (tabs.length) ? TabRegistry.guid(tabs[0].id) : null;
+			var tab = (tabs.length) ? tabs[0] : null, 
+				guid = (tab) ? TabRegistry.guid(tab.id) : null;
+			
 			// If this tab is rogue
 			if (guid === null) {
 				setIcon('disabled');
 				return;
 			}
-			
-			tab = tabs[0];
 			
 			if (tab.pinned || TabRegistry.get(guid, 'defused')) {
 				setIcon('infinity');
@@ -98,6 +100,7 @@
 		});
 	}
 	
+	// Public function so browser action can reach it.
 	window.defuse = function() {
 		chrome.tabs.query({
 			active: true,
@@ -113,6 +116,7 @@
 		});
 	}
 	
+	// Public defaults so options page can reach it.
 	window.defaults = {
 		options: {
 			timeout: 60,
