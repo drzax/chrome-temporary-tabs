@@ -7,15 +7,6 @@
 		removed = data.removed;
 	});
 	
-	chrome.extension.onMessage.addListener(function(message, sender) {
-		if (sender.tab.active) {
-			active = TabRegistry.guid(sender.tab.id);
-		} else {
-			arm(TabRegistry.guid(sender.tab.id));
-		}
-		updateBrowserButton();
-	});
-	
 	chrome.tabs.onActivated.addListener(function(info) {
 		
 		var guid;
