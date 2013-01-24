@@ -1,6 +1,6 @@
 (function(undefined){
 	
-	var active = false,
+	var active = false, // GUID for the most recently active tab.
 		removed = [];
 		
 	chrome.storage.local.get({removed: []}, function(data){
@@ -14,16 +14,20 @@
 		// Make sure the browser button looks like it should.
 		updateBrowserButton();
 		
-		guid = TabRegistry.guid(info.tabId);
+		try {
+			guid = TabRegistry.guid(info.tabId);
+		} catch(e) {
+			guid = false;
+		}
 		
 		// Arm the tab we just switched away from.
 		if (active) arm(active);
 		
 		// Disarm this tab
-		disarm(guid);
+		if (guid) disarm(guid);
 		
 		// Change which tab is active.
-		active = guid || false;
+		active = guid;
 		
 	});
 	
@@ -32,7 +36,7 @@
 	function arm(guid) {
 		
 		// If guid is null we can't arm anything
-		if (guid == null) return;
+		if (!guid) return;
 		
 		// Always disarm before arming to avoid double arming
 		disarm(guid);
@@ -45,26 +49,30 @@
 			if (data.options.unit === 'hour') multiplier *= 3600;
 			if (data.options.unit === 'day') multiplier *= 86400;
 			
-			TabRegistry.set(guid, 'timeout', setTimeout(function(){
-				chrome.tabs.get(TabRegistry.id(guid), function(tab){
-					if (tab.active || tab.pinned || TabRegistry.get(guid, 'defused')) return;
-					if (tab.url !== 'chrome://newtab/') {
-						tab.removed = Date();
-						tab.guid = guid;
-						removed.unshift(tab);
-						while (removed.length > 30) removed.pop();
-						chrome.storage.local.set({removed: removed});
-					}
-					chrome.tabs.remove(tab.id);
-				});
-			}, data.options.timeout*multiplier));
+			try {
+				TabRegistry.set(guid, 'timeout', setTimeout(function(){
+					chrome.tabs.get(TabRegistry.id(guid), function(tab){
+						if (tab.active || tab.pinned || TabRegistry.get(guid, 'defused')) return;
+						if (tab.url !== 'chrome://newtab/') {
+							tab.removed = Date();
+							tab.guid = guid;
+							removed.unshift(tab);
+							while (removed.length > 30) removed.pop();
+							chrome.storage.local.set({removed: removed});
+						}
+						chrome.tabs.remove(tab.id);
+					});
+				}, data.options.timeout*multiplier));
+			} catch (e) {}
+				
 		});
 	}
 	
 	function disarm(guid) {
-		if (guid !== null) {
+		try {
 			clearTimeout(TabRegistry.get(guid, 'timeout'));
-		}
+			TabRegistry.set(guid, 'timeout', null);
+		} catch(e) {}
 	}
 	
 	function updateBrowserButton() {
@@ -83,11 +91,18 @@
 			currentWindow: true
 		}, function(tabs){
 			
-			var tab = (tabs.length) ? tabs[0] : null, 
-				guid = (tab) ? TabRegistry.guid(tab.id) : null;
+			var tab, guid;
+				
+			tab = (tabs.length) ? tabs[0] : false; 
+			try {
+				guid = (tab) ? TabRegistry.guid(tab.id) : false;
+			} catch (e) {
+				guid = false;
+			}
+			
 			
 			// If this tab is rogue
-			if (guid === null) {
+			if (guid === false) {
 				setIcon('disabled');
 				return;
 			}
