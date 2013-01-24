@@ -11,7 +11,8 @@
 		"tabs",
 		"storage",
 		"http://*/*",
-		"https://*/*"
+		"https://*/*",
+		"file://*/*"
 	],
 	"background": {
 		"scripts": [
