@@ -33,6 +33,22 @@
 	
 	chrome.tabs.onUpdated.addListener(updateBrowserButton);
 	
+	function lightFuse(guid) {
+		return function(){
+			chrome.tabs.get(TabRegistry.id(guid), function(tab){
+				if (tab.active || tab.pinned || TabRegistry.get(guid, 'defused')) return;
+				if (tab.url !== 'chrome://newtab/') {
+					tab.removed = Date();
+					tab.guid = guid;
+					removed.unshift(tab);
+					while (removed.length > 30) removed.pop();
+					chrome.storage.local.set({removed: removed});
+				}
+				chrome.tabs.remove(tab.id);
+			});
+		}
+	}
+	
 	function arm(guid) {
 		
 		// If guid is null we can't arm anything
@@ -50,19 +66,7 @@
 			if (data.options.unit === 'day') multiplier *= 86400;
 			
 			try {
-				TabRegistry.set(guid, 'timeout', setTimeout(function(){
-					chrome.tabs.get(TabRegistry.id(guid), function(tab){
-						if (tab.active || tab.pinned || TabRegistry.get(guid, 'defused')) return;
-						if (tab.url !== 'chrome://newtab/') {
-							tab.removed = Date();
-							tab.guid = guid;
-							removed.unshift(tab);
-							while (removed.length > 30) removed.pop();
-							chrome.storage.local.set({removed: removed});
-						}
-						chrome.tabs.remove(tab.id);
-					});
-				}, data.options.timeout*multiplier));
+				TabRegistry.set(guid, 'timeout', setTimeout(lightFuse(), data.options.timeout*multiplier));
 			} catch (e) {}
 				
 		});
