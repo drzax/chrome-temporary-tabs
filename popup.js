@@ -77,7 +77,13 @@
 		currentWindow: true
 	}, function(tabs){
 		var registry = chrome.extension.getBackgroundPage().TabRegistry,
-			guid = (tabs.length) ? registry.guid(tabs[0].id) : null;
+			guid;
+			try {
+				guid = (tabs.length) ? registry.guid(tabs[0].id) : false;
+			} catch (e) {
+				guid = false;
+			}
+		
 		if (guid) {
 			if (registry.get(guid, 'defused')) $('#defuse').attr('disabled','disabled').text('Defused');
 		} else {
