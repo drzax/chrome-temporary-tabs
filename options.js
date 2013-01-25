@@ -42,14 +42,17 @@
 		load();
 	}
 	
+	function openRegistry() {
+		chrome.windows.create({url: 'registry.html', type: 'popup', width: 900, height: 1200}, function(window) {});
+	}
+	
 	$(function(){
 		load();
 
 		$(document).on('change', 'select', save);
 		$(document).on('keyup', 'input', save);
-
-		$('#clear').on('click', function(){
-			clear();
-		});
+		
+		$('#registry').on('click', openRegistry);
+		$('#clear').on('click', clear);
 	});
 })(jQuery)
