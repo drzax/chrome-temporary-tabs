@@ -17,21 +17,21 @@
 	"background": {
 		"scripts": [
 			"lib/tab-registry/TabRegistry.js",
-			"background.js"
+			"js/background.js"
 		],
 		"persistent": true
 	},
-	"options_page": "options.html",
+	"options_page": "html/options.html",
 	"browser_action": {
 		"default_icon": {
 			"19": "images/disabled-19.png",
 			"38": "images/disabled-38.png"
 		},
 		"default_title": "This page will self destruct",
-		"default_popup": "popup.html"
+		"default_popup": "html/popup.html"
 	},
 	"chrome_url_overrides" : {
-		"newtab": "blank.html"
+		"newtab": "html/blank.html"
 	},
 	"manifest_version": 2
 }
