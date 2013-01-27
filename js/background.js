@@ -36,7 +36,7 @@
 	function lightFuse(guid) {
 		return function(){
 			chrome.tabs.get(TabRegistry.id(guid), function(tab){
-				if (tab.active || tab.pinned || TabRegistry.get(guid, 'defused')) return;
+				if (tab.active || tab.pinned || TabRegistry.attrs.get(guid, 'defused')) return;
 				if (tab.url !== 'chrome://newtab/') {
 					tab.removed = Date();
 					tab.guid = guid;
@@ -66,7 +66,7 @@
 			if (data.options.unit === 'day') multiplier *= 86400;
 			
 			try {
-				TabRegistry.set(guid, 'timeout', setTimeout(lightFuse(), data.options.timeout*multiplier));
+				TabRegistry.attrs.set(guid, 'timeout', setTimeout(lightFuse(guid), data.options.timeout*multiplier));
 			} catch (e) {}
 				
 		});
@@ -74,8 +74,8 @@
 	
 	function disarm(guid) {
 		try {
-			clearTimeout(TabRegistry.get(guid, 'timeout'));
-			TabRegistry.set(guid, 'timeout', null);
+			clearTimeout(TabRegistry.attrs.get(guid, 'timeout'));
+			TabRegistry.attrs.set(guid, 'timeout', null);
 		} catch(e) {}
 	}
 	
@@ -111,7 +111,7 @@
 				return;
 			}
 			
-			if (tab.pinned || TabRegistry.get(guid, 'defused')) {
+			if (tab.pinned || TabRegistry.attrs.get(guid, 'defused')) {
 				setIcon('infinity');
 			} else {
 				setIcon('apocalypse');
@@ -128,7 +128,7 @@
 			var guid = (tabs.length) ? TabRegistry.guid(tabs[0].id) : null;
 			
 			if (guid) {
-				TabRegistry.set(guid, 'defused', true);
+				TabRegistry.attrs.set(guid, 'defused', true);
 			}
 			
 			updateBrowserButton();		
