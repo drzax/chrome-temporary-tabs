@@ -6,7 +6,7 @@
 		var input = e.target,
 			$status = $("#status");
 
-		chrome.storage.sync.get(chrome.extension.getBackgroundPage().defaults, function(data){
+		chrome.storage.sync.get({timeout: 60, unit: 'minute'}, function(data){
 			data.options[input.name] = input.value;
 			chrome.storage.sync.set(data);
 		});
@@ -29,7 +29,7 @@
 	 * Load options back into the form from storage.
 	 */
 	function load() {
-		chrome.storage.sync.get(chrome.extension.getBackgroundPage().defaults, function(data){
+		chrome.storage.sync.get({timeout: 60, unit: 'minute'}, function(data){
 			var key;
 			for (key in data.options) {
 				document.getElementById(key).value = data.options[key];

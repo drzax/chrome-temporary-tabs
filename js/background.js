@@ -180,12 +180,4 @@
 		});
 	}
 	
-	// Public defaults so options page can reach it.
-	window.defaults = {
-		options: {
-			timeout: 60,
-			unit: 'minute'
-		}
-	}
-	
 })();
