@@ -1,55 +1,124 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Options - This Tab Will Self Destruct™</title>
+		<title>This Tab Will Self Destruct™</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link href="../css/options.css" rel="stylesheet" media="screen">
 	</head>
 	<body>
+		
 		<div class="container-fluid">
 			<div class="row-fluid">
-				<div class="span2">
-					<p class="lead">This Tab Will Self Destruct™</p>
-					<p>Tabs will close after <span class="timeout"></span> <span class="unit"></span> of inactivity.</p>
-					<p>Tabs won't self destruct if they're pinned or currently active.</p>
-					<p>Defuse a self destructing tab by clicking the <img src="../images/apocalypse-16.png"/> icon on the toolbar and choosing <a class="btn btn-small">Defuse</a>.</p>
-					<div class="muted">
-						<p>This is an open source program. The source code is available on <a href="https://github.com/drzax/chrome-temporary-tabs">GitHub</a>. Please feel free to contribute or modify for your own purposes. If you have a bug report or, better yet, know how to fix one, that should be done at <a href="https://github.com/drzax/chrome-temporary-tabs/issues">GitHub</a> too.</p>
-					</div>
-					
+				<div class="span12 page-header">
+					<h2>This Tab Will Self Destruct™</h2>
+					<!--<p class="lead">Tabs will self destruct after <span class="timeout"></span> <span class="unit"></span> of inactivity.</p>-->
 				</div>
-				<div class="span10">
+			</div>
+			
+			<div class="row-fluid">
+				<div class="span12">
 					<form class="inline-form">
-						<p class="lead">Options <span id="status" class="label label-success">Saved</span></p>
 						<fieldset>
 							<span>Close tabs after</span> <input type="text" size="3" name="timeout" class="input-mini" id="timeout" />
 							<select id="unit" name="unit" class="input-small">
 								<option value="minute">Minutes</option>
 								<option value="hour">Hours</option>
 								<option value="day">Days</option>
-							</select> <span>of inactivity.</span>
-							
+							</select> <span>of inactivity.</span> <span id="status" class="label label-success">Saved</span>
 						</fieldset>
 					</form>
 					<hr>
-					<div class="muted">
-						<p><a href="http://drzax.mit-license.org/">The MIT License (MIT)</a><br>Copyright © 2013 <a href="http://elvery.net">Simon Elvery</a> &lt;<a href="mailto:simon@elvery.net">simon@elvery.net</a>&gt;</p>
-
-						<p>Icons thanks to <a href="">The Noun Project</a></p>
-						<ul>
-							<li><a href="http://thenounproject.com/noun/infinity/#icon-No9992">Infinity</a> designed by <a href="http://thenounproject.com/cengizsari">Cengiz SARI</a> from The Noun Project</li>
-							<li><a href="http://thenounproject.com/noun/apocalypse/#icon-No9383">Apocalypse</a> designed by <a href="http://thenounproject.com/markszulyovszky">Mark Szulyovszky</a> from The Noun Project</li>
-						</ul>
-					</div>
-					<hr>
-					<button class="btn btn-mini btn-warning" id="clear">Clear all extension data</button>
-					<button class="btn btn-mini" id="registry">View registry</button>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span7">
+					
+					<h3>Usage</h3>
+					<p class="lead">All tabs will automatically self destruct after <span class="timeout"></span> <span class="unit"></span> of inactivity.</p>
+					<ul>
+						<li>Active tabs will never self destruct.</li>
+						<li>Pinned tabs will never self destruct.</li>
+						<li>Defused tabs will never self destruct.</li>
+					</ul>
+					<p>The <a class="btn btn-small">Defuse</a> button can be found by clicking the toolbar icon.</p>
+					
+					<h4>Toolbar icons</h4>
+					<p>The toolbar icon can take any of these three states which indicates the status of the current tab.</p>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Icon</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								
+								<td><img src="../images/disabled-19.png"/></td>
+								<td>This tab cannot self destruct (it probably hasn't finished loading yet).</td>
+							</tr>
+							<tr>
+								<td><img src="../images/apocalypse-19.png"/></td>
+								<td>This tab is currently set to self destruct after <span class="timeout"></span> <span class="unit"></span> of inactivity.</td>
+							</tr>
+							<tr>
+								<td><img src="../images/infinity-19.png"/></td>
+								<td>This tab has been defused or is pinned and therefore will not self destruct.</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>Clicking the toolbar icon will reveal a list of tabs which have recently suffered the fate of self destruction. The most recent 300 tabs which have suffered this fate are kept in the log.</p>
+				</div>
+				<div class="span4 offset1 muted">
+					<h3>Credits</h3>
+					<p>This is an open source program. The source code is available on GitHub. Please feel free to contribute or modify for your own purposes. If you have a bug report or, better yet, know how to fix one, that should be done at GitHub too.</p>
+					<p>Icons thanks to <a href="">The Noun Project</a>. <a href="http://thenounproject.com/noun/infinity/#icon-No9992">Infinity</a> designed by <a href="http://thenounproject.com/cengizsari">Cengiz SARI</a> and <a href="http://thenounproject.com/noun/apocalypse/#icon-No9383">Apocalypse</a> designed by <a href="http://thenounproject.com/markszulyovszky">Mark Szulyovszky</a>.</p>
+					<p><a href="http://drzax.mit-license.org/">The MIT License (MIT)</a><br>Copyright © 2013 <a href="http://elvery.net">Simon Elvery</a> &lt;<a href="mailto:simon@elvery.net">simon@elvery.net</a>&gt;</p>
 					
 				</div>
 			</div>
+			<hr>
+			<div class="row-fluid">
+				<button class="btn btn-mini btn-warning" id="clear">Clear all extension data</button>
+				<button class="btn btn-mini" id="registry-toggle">View registry</button>
+			</div>
+			<div class="row-fluid" id="registry">
+				<hr>
+				<h4>Current session</h4>
+				<table class="table table-bordered table-condensed" id="registry-current">
+					<thead>
+						<tr>
+							<th>GUID</th>
+							<th>Tab ID</th>
+							<th>Tab Index</th>
+							<th>Fingerprint</th>
+							<th>Attributes</th>
+							<th>Destruction</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
+				</table>
+				<h4>Previous session</h4>
+				<table class="table table-bordered table-condensed" id="registry-previous">
+					<thead>
+						<tr>
+							<th>GUID</th>
+							<th>Tab ID</th>
+							<th>Tab Index</th>
+							<th>Fingerprint</th>
+							<th>Attributes</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
+				</table>
+			</div>
 		</div>
-		
+		<a href="https://github.com/drzax/chrome-temporary-tabs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 		
 		
 		<script src="../lib/jquery/jquery-1.9.0.min.js"></script>
