@@ -36,7 +36,7 @@
 	}
 	
 	chrome.storage.local.get({removed: []}, function(data) {
-		var i, date, lastDate, currentDay, table='';
+		var i, date, lastDate, currentDay, html='';
 		
 		if (data.removed.length) {
 			for (i in data.removed) {
@@ -47,24 +47,24 @@
 				date = new Date(data.removed[i].removed);
 
 				if (currentDay !== date.toDateString()) {
-					if (table !== null) table += '</ol>';
-					table += getDateHeading(date);
-					table += '<ol class="history">';
+					if (html !== null) html += '</ol>';
+					html += getDateHeading(date);
+					html += '<ol class="history">';
 					currentDay = date.toDateString();
 				} else if (lastDate && (lastDate-date)/1000/60 > 20) {
-					table += '<li class="divider"><span class="time">|</span></li>';
+					html += '<li class="divider"><span class="time">|</span></li>';
 				}
-				table += '<li><span class="time">' + date.get12HourTime() + '</span> ';
-				table += '<img width="16" height="16" src="' + data.removed[i].favIconUrl + '"/>';
-				table += '<a href="' + data.removed[i].url + '">' + ((data.removed[i].title.length > 50) ? data.removed[i].title.substr(0, 50) + '&hellip;' : data.removed[i].title) + '</a></li>';
+				html += '<li><span class="time">' + date.get12HourTime() + '</span> ';
+				html += '<img width="16" height="16" src="' + data.removed[i].favIconUrl + '"/>';
+				html += '<a href="' + data.removed[i].url + '">' + ((data.removed[i].title.length > 50) ? data.removed[i].title.substr(0, 50) + '&hellip;' : data.removed[i].title) + '</a></li>';
 				lastDate = date;
 			}
-			table += '</ol>';
+			html += '</ol>';
 		} else {
-			table = '<div class="nothing">Still waiting for <br>an explosion</div>';
+			html = '<div class="nothing">Still waiting for <br>an explosion</div>';
 		}
 			
-		$('#list').html(table);
+		$('#list').html(html);
 	});
 	
 	$('#defuse').on('click', function(){
@@ -85,7 +85,7 @@
 			}
 		
 		if (guid) {
-			if (registry.get(guid, 'defused')) $('#defuse').attr('disabled','disabled').text('Defused');
+			if (registry.attr.get(guid, 'defused')) $('#defuse').attr('disabled','disabled').text('Defused');
 		} else {
 			$('#defuse').hide();
 		}
