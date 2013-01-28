@@ -32,7 +32,7 @@
 				try {
 
 					guid = TabRegistry.guid(tab.id);
-					if (TabRegistry.attrs.get(guid, 'timeout') === undefined) {
+					if (TabRegistry.attr.get(guid, 'timeout') === undefined) {
 						arm(tab.id);
 					}
 
@@ -52,12 +52,12 @@
 			chrome.tabs.get(TabRegistry.id(guid), function(tab){
 				
 				// Clean the registry
-				TabRegistry.attrs.clear(guid, 'timeout');
-				TabRegistry.attrs.clear(guid, 'fuse-length');
-				TabRegistry.attrs.clear(guid, 'fuse-lit');
+				TabRegistry.attr.clear(guid, 'timeout');
+				TabRegistry.attr.clear(guid, 'fuse-length');
+				TabRegistry.attr.clear(guid, 'fuse-lit');
 				
 				// Don't close tabs that shouldn't be closed
-				if (tab.active || tab.pinned || TabRegistry.attrs.get(guid, 'defused')) return;
+				if (tab.active || tab.pinned || TabRegistry.attr.get(guid, 'defused')) return;
 
 				tab.removed = Date();
 				tab.guid = guid;
@@ -90,11 +90,11 @@
 			try {
 				guid = TabRegistry.guid(tabId);
 				chrome.tabs.get(tabId, function(tab){
-					if ( !(tab.active || tab.pinned || TabRegistry.attrs.get(guid, 'defused')) ) {
+					if ( !(tab.active || tab.pinned || TabRegistry.attr.get(guid, 'defused')) ) {
 
-						TabRegistry.attrs.set(guid, 'timeout', setTimeout(lightFuse(guid), data.options.timeout*multiplier));
-						TabRegistry.attrs.set(guid, 'fuse-lit', new Date());
-						TabRegistry.attrs.set(guid, 'fuse-length', data.options.timeout*multiplier);
+						TabRegistry.attr.set(guid, 'timeout', setTimeout(lightFuse(guid), data.options.timeout*multiplier));
+						TabRegistry.attr.set(guid, 'fuse-lit', new Date());
+						TabRegistry.attr.set(guid, 'fuse-length', data.options.timeout*multiplier);
 
 					}
 				});
@@ -111,10 +111,10 @@
 		
 		try {
 			guid = TabRegistry.guid(tabId);
-			clearTimeout(TabRegistry.attrs.get(guid, 'timeout'));
-			TabRegistry.attrs.clear(guid, 'timeout');
-			TabRegistry.attrs.clear(guid, 'fuse-length');
-			TabRegistry.attrs.clear(guid, 'fuse-lit');
+			clearTimeout(TabRegistry.attr.get(guid, 'timeout'));
+			TabRegistry.attr.clear(guid, 'timeout');
+			TabRegistry.attr.clear(guid, 'fuse-length');
+			TabRegistry.attr.clear(guid, 'fuse-lit');
 		} catch(e) {
 			console.error(e);
 		}
@@ -152,7 +152,7 @@
 				return;
 			}
 			
-			if (tab.pinned || TabRegistry.attrs.get(guid, 'defused')) {
+			if (tab.pinned || TabRegistry.attr.get(guid, 'defused')) {
 				setIcon('infinity');
 			} else {
 				setIcon('apocalypse');
@@ -169,7 +169,7 @@
 			var guid = (tabs.length) ? TabRegistry.guid(tabs[0].id) : null;
 			
 			if (guid) {
-				TabRegistry.attrs.set(guid, 'defused', true);
+				TabRegistry.attr.set(guid, 'defused', true);
 			}
 			
 			updateBrowserButton();		
