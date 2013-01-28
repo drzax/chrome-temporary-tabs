@@ -129,6 +129,10 @@
 					"38": "images/"+icon+"-38.png"
 				}
 			});
+			
+			chrome.browserAction.setTitle({
+				title: ((icon == 'apocalypse') ? 'This tab will self destruct.' : 'This tab will not self destruct.')
+			});
 		}
 		
 		chrome.tabs.query({
