@@ -51,7 +51,7 @@
 		if (btn == 'View registry') {
 			$('#registry').slideDown();
 			$('#registry-toggle').text('Hide registry');
-			timeout = setInterval(renderRegistry, 100);
+			timeout = setInterval(renderRegistry, 500);
 		} else {
 			$('#registry').slideUp();
 			$('#registry-toggle').text('View registry');
