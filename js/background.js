@@ -80,7 +80,7 @@
 		// Always disarm before arming to avoid double arming
 		disarm(tabId);
 		
-		chrome.storage.sync.get({timeout: 60, unit: 'minute'}, function(data){
+		chrome.storage.sync.get({options: {timeout: 60, unit: 'minute'}}, function(data){
 			
 			var multiplier = 1000;
 			
