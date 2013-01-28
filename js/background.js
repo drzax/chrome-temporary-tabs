@@ -1,6 +1,6 @@
 (function(undefined){
 	
-	var active = false, // GUID for the most recently active tab.
+	var active = {}, // Keep track of active tabs in each window.
 		removed = [];
 		
 	chrome.storage.local.get({removed: []}, function(data){
@@ -9,25 +9,39 @@
 	
 	chrome.tabs.onActivated.addListener(function(info) {
 		
-		var guid;
-		
 		// Make sure the browser button looks like it should.
 		updateBrowserButton();
 		
-		try {
-			guid = TabRegistry.guid(info.tabId);
-		} catch(e) {
-			guid = false;
-		}
-		
 		// Arm the tab we just switched away from.
-		if (active) arm(active);
+		if (active[info.windowId]) arm(active[info.windowId]);
 		
 		// Disarm this tab
-		if (guid) disarm(guid);
+		disarm(info.tabId);
 		
 		// Change which tab is active.
-		active = guid;
+		active[info.windowId] = info.tabId;
+		
+	});
+	
+	TabRegistry.onAdded.addListener(function(guid, tabId){
+		chrome.tabs.get(tabId, function(tab){
+			disarm(tab.id);
+			if (tab.active) {
+				active[tab.windowId] = tab.id;
+			} else {
+				try {
+
+					guid = TabRegistry.guid(tab.id);
+					if (TabRegistry.attrs.get(guid, 'timeout') === undefined) {
+						arm(tab.id);
+					}
+
+				} catch (e) {
+					console.error(e);
+				}
+			}
+			updateBrowserButton();
+		});
 		
 	});
 	
@@ -36,26 +50,35 @@
 	function lightFuse(guid) {
 		return function(){
 			chrome.tabs.get(TabRegistry.id(guid), function(tab){
+				
+				// Clean the registry
+				TabRegistry.attrs.clear(guid, 'timeout');
+				TabRegistry.attrs.clear(guid, 'fuse-length');
+				TabRegistry.attrs.clear(guid, 'fuse-lit');
+				
+				// Don't close tabs that shouldn't be closed
 				if (tab.active || tab.pinned || TabRegistry.attrs.get(guid, 'defused')) return;
-				if (tab.url !== 'chrome://newtab/') {
-					tab.removed = Date();
-					tab.guid = guid;
-					removed.unshift(tab);
-					while (removed.length > 30) removed.pop();
-					chrome.storage.local.set({removed: removed});
-				}
+
+				tab.removed = Date();
+				tab.guid = guid;
+				removed.unshift(tab);
+
+				// Trim removed list
+				while (removed.length > 50) removed.pop();
+
+				chrome.storage.local.set({removed: removed});
+				
 				chrome.tabs.remove(tab.id);
 			});
 		}
 	}
 	
-	function arm(guid) {
+	function arm(tabId) {
 		
-		// If guid is null we can't arm anything
-		if (!guid) return;
+		var guid;
 		
 		// Always disarm before arming to avoid double arming
-		disarm(guid);
+		disarm(tabId);
 		
 		chrome.storage.sync.get(window.defaults, function(data){
 			
@@ -64,19 +87,37 @@
 			if (data.options.unit === 'minute') multiplier *= 60;
 			if (data.options.unit === 'hour') multiplier *= 3600;
 			if (data.options.unit === 'day') multiplier *= 86400;
-			
 			try {
-				TabRegistry.attrs.set(guid, 'timeout', setTimeout(lightFuse(guid), data.options.timeout*multiplier));
-			} catch (e) {}
+				guid = TabRegistry.guid(tabId);
+				chrome.tabs.get(tabId, function(tab){
+					if ( !(tab.active || tab.pinned || TabRegistry.attrs.get(guid, 'defused')) ) {
+
+						TabRegistry.attrs.set(guid, 'timeout', setTimeout(lightFuse(guid), data.options.timeout*multiplier));
+						TabRegistry.attrs.set(guid, 'fuse-lit', new Date());
+						TabRegistry.attrs.set(guid, 'fuse-length', data.options.timeout*multiplier);
+
+					}
+				});
+			} catch (e) {
+				console.error(e);
+			}
 				
 		});
 	}
 	
-	function disarm(guid) {
+	function disarm(tabId) {
+		
+		var guid;
+		
 		try {
+			guid = TabRegistry.guid(tabId);
 			clearTimeout(TabRegistry.attrs.get(guid, 'timeout'));
-			TabRegistry.attrs.set(guid, 'timeout', null);
-		} catch(e) {}
+			TabRegistry.attrs.clear(guid, 'timeout');
+			TabRegistry.attrs.clear(guid, 'fuse-length');
+			TabRegistry.attrs.clear(guid, 'fuse-lit');
+		} catch(e) {
+			console.error(e);
+		}
 	}
 	
 	function updateBrowserButton() {
