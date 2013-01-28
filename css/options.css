@@ -1,0 +1,6 @@
+#status {display: none; vertical-align: middle;}
+fieldset span {height: 20px; padding: 4px 6px; display: inline-block; margin-bottom: 10px; vertical-align: middle;}
+h1,h2,h3,h4,h5 {font-weight: 200;}
+#registry {display: none;}
+#registry tbody {whitespace: pre; font-family: monospace;}
+tr.removed {color: #ccc;}
