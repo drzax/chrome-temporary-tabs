@@ -13,8 +13,24 @@ After installation you may need to restart Chrome.
 
 Usage
 -----
-Usage is documented in the extension's options screen.
-	
+All tabs will automatically self destruct after a specified period of inactivity (default is 60 minutes).
+
+- Active tabs will never self destruct.
+- Pinned tabs will never self destruct.
+- Defused tabs will never self destruct.
+
+The Defuse button can be found by clicking the toolbar icon.
+
+### Toolbar icons
+
+The toolbar icon can take any of these three states which indicates the status of the current tab.
+
+- <img src="https://github.com/drzax/chrome-temporary-tabs/raw/master/images/disabled-19.png"> This tab cannot self destruct (it probably hasn't finished loading yet).
+- <img src="https://github.com/drzax/chrome-temporary-tabs/raw/master/images/apocalypse-19.png"> This tab is currently set to self destruct after 60 minutes of inactivity.
+- <img src="https://github.com/drzax/chrome-temporary-tabs/raw/master/images/infinity-19.png"> This tab has been defused or is pinned and therefore will not self destruct.
+
+Clicking the toolbar icon will reveal a list of tabs which have recently suffered the fate of self destruction. The most recent 50 tabs which have suffered this fate are kept in the log.	
+
 Credits
 -------
 Icons from the [Noun Project](http://thenounproject.com/): 
