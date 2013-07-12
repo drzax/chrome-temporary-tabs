@@ -7,7 +7,7 @@ browser snappy.
 Installation
 ------------
 
-This extension is now available from the Chrome Web Store.
+This extension is now [available from the Chrome Web Store](https://chrome.google.com/webstore/detail/this-tab-will-self-destru/aohhnbhpkopmfemfonachenhjohjojnj).
 
 You can also install it manually if you wish by downloading either the 
 [temporary-tab.crx](https://github.com/drzax/chrome-temporary-tabs/blob/release/temporary-tab.crx?raw=true) file from 
