@@ -6,7 +6,7 @@
 		"48": "images/apocalypse-48.png",
 		"128": "images/apocalypse-128.png" 
 	},
-	"version": "0.5",
+	"version": "0.6",
 	"permissions": [
 		"tabs",
 		"storage",
@@ -14,6 +14,7 @@
 		"https://*/*",
 		"file://*/*"
 	],
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"background": {
 		"scripts": [
 			"lib/tab-registry/TabRegistry.js",
