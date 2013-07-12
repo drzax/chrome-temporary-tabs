@@ -1,29 +1,43 @@
 #!/bin/bash -e
-#
-# Purpose: Pack a Chromium extension directory into crx format
 
-if test $# -ne 2; then
-  echo "Usage: crxmake.sh <extension dir> <pem path>"
-  exit 1
+#
+# Pack a Chromium extension directory into crx and zip formats ready for upload to the Chrome Web Store or for loading
+# manually.
+#
+
+# Default pem path
+key="./temporary-tab.pem"
+
+# Check if an alternative pem path has been provided
+if [ -r "$1" ]; then
+	key="$1"
 fi
 
-dir=$1
-key=$2
+dir=$(pwd -P)
 name=$(basename "$dir")
 crx="$name.crx"
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
-trap 'rm -f "$pub" "$sig" "$zip"' EXIT
 
-# zip up the crx dir
-cwd=$(pwd -P)
-(cd "$dir" && zip -qr -9 -x *.git* nbproject* $crx -X "$cwd/$zip" .)
+# Clean up on exit
+trap 'rm -f "$pub" "$sig"' EXIT
 
-# signature
+# Zip up the dir
+(cd "$dir" && zip -qr -9 -x *.git* 'nbproject/*' $key $crx build.sh .DS_Store -X "$dir/$zip" .)
+
+echo "Wrote $zip"
+
+# Check that the final pem path is loadable
+if [ ! -r "$key" ]; then
+	echo "The specified key file ($key) could not be loaded. Only the .zip file was created."
+	exit 0
+fi
+
+# Generate signature
 openssl sha1 -sha1 -binary -sign "$key" < "$zip" > "$sig"
 
-# public key
+# Generate public key
 openssl rsa -pubout -outform DER < "$key" > "$pub" 2>/dev/null
 
 byte_swap () {
