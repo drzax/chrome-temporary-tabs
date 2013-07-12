@@ -6,7 +6,7 @@
 		"48": "images/apocalypse-48.png",
 		"128": "images/apocalypse-128.png" 
 	},
-	"version": "0.6",
+	"version": "0.7",
 	"permissions": [
 		"tabs",
 		"storage",
