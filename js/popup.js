@@ -56,7 +56,7 @@
 				}
 				html += '<li><span class="time">' + date.get12HourTime() + '</span> ';
 				html += '<img width="16" height="16" src="' + data.removed[i].favIconUrl + '"/>';
-				html += '<a href="' + data.removed[i].url + '">' + ((data.removed[i].title.length > 50) ? data.removed[i].title.substr(0, 50) + '&hellip;' : data.removed[i].title) + '</a></li>';
+				html += '<a href="' + data.removed[i].url + '" title="' + data.removed[i].url + '">' + ((data.removed[i].title.length > 50) ? data.removed[i].title.substr(0, 50) + '&hellip;' : data.removed[i].title) + '</a></li>';
 				lastDate = date;
 			}
 			html += '</ol>';
